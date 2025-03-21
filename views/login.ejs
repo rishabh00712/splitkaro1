@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Clean Blue Login</title>
+    <link rel="stylesheet" href="/styles/login.css">
+</head>
+<body>
+    <div id="notification-container"></div>
+    <div class="form-container">
+        <h2>Welcome Back</h2>
+        
+        <form action="/login" method="POST">
+            <div class="input-group">
+                <input type="email"name="email" required placeholder=" ">
+                <label>test@gmail.com</label>
+            </div>
+            <div class="input-group">
+                <input type="password" name="password" required placeholder=" ">
+                <label>test123</label>
+            </div>
+            <button type="submit">Sign In</button>
+        </form>
+    </div>
+    <script>
+         document.addEventListener("DOMContentLoaded", () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const errorMessage = urlParams.get("error");
+            const successMessage = urlParams.get("success");
+
+            if (errorMessage) showNotification(errorMessage, "error");
+            if (successMessage) showNotification(successMessage, "success");
+        });
+
+        function showNotification(message, type) {
+            const container = document.getElementById("notification-container");
+            if (!container) return;
+
+            const notification = document.createElement("div");
+            notification.classList.add("notification", type); // Add type for styling
+            notification.innerText = message;
+
+            container.prepend(notification); // Newest message on top
+
+            setTimeout(() => {
+                notification.classList.add("fade-out"); // Start fade-out effect
+                setTimeout(() => notification.remove(), 500); // Remove from DOM
+            }, 4000);
+        }
+    </script>
+</body>
+</html>

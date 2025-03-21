@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" href="/styles/profile.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+
+<body>
+    <div id="notification-container"></div>
+    <div class="button-containers">
+
+        <button class="back-button" onclick="window.location.href='/home'">
+            &#x276E;
+        </button>
+
+    </div>
+    <div class="container">
+        <!-- Profile Section -->
+        <div class="profile-section">
+            <div class="profile-pic"></div>
+
+            <form id="profile-form" action="/update-profile" method="POST">
+                <div class="editable-field">
+                    <input type="text" name="name" placeholder="Your Name" value="<%= name %>">
+                    <button type="submit">Submit</button>
+                </div>
+
+                <div class="editable-field">
+                    <input type="number" name="amount" placeholder="Your Maximum Amount" value="<%= amount %>">
+                    <button type="submit">Submit</button>
+                </div>
+            </form>
+
+        </div>
+
+        <!-- Star Rating -->
+        <div class="stars">
+            <% for(let i=0; i < 5; i++) { %>
+                <span class="star <%= i < stars ? 'green' : '' %>">&#9733;</span>
+                <% } %>
+        </div>
+
+        <!-- Pending Bills -->
+        <p class="pending-bills">
+            <%= correct %> pending bills paid on time and <%= late %> paid late
+        </p>
+
+
+        <!-- Expense Section -->
+        <div class="expense-section">
+            <h2>Your Total Spend <%=total_sum%> Rs
+            </h2>
+
+            
+    <canvas id="myDoughnutChart"></canvas>
+ 
+        </div>
+    </div>
+
+    <script id="chart-data" type="application/json">
+        <%= JSON.stringify(values) %>
+    </script>
+
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const errorMessage = urlParams.get("error");
+            const successMessage = urlParams.get("success");
+
+            if (errorMessage) showNotification(errorMessage, "error");
+            if (successMessage) showNotification(successMessage, "success");
+        });
+
+        function showNotification(message, type) {
+            const container = document.getElementById("notification-container");
+            if (!container) return;
+
+            const notification = document.createElement("div");
+            notification.classList.add("notification", type); // Add type for styling
+            notification.innerText = message;
+
+            container.prepend(notification); // Newest message on top
+
+            setTimeout(() => {
+                notification.classList.add("fade-out"); // Start fade-out effect
+                setTimeout(() => notification.remove(), 500); // Remove from DOM
+            }, 4000);
+        }
+
+        document.addEventListener("DOMContentLoaded", function () {
+            const labels = [
+                "Food", "Groceries", "Travel", "Stays", "Bills",
+                "Subscription", "Shopping", "Gifts", "Drinks", "Fuel",
+                "Udhhar", "Health", "Entertainment", "Others"
+            ];
+
+            const colors = [
+                "#ff6384", "#36a2eb", "#ffce56", "#4bc0c0", "#9966ff",
+                "#ff9f40", "#ffcd56", "#4b7bec", "#20bf6b", "#eb3b5a",
+                "#f7b731", "#8854d0", "#26de81", "#a55eea"
+            ];
+
+            // Get values from the script tag
+            const values = JSON.parse(document.getElementById("chart-data").textContent)
+                .map(num => parseFloat(num));
+
+            const createChart = (ctxId, type) => {
+                const ctx = document.getElementById(ctxId).getContext('2d');
+                new Chart(ctx, {
+                    type: type,
+                    data: {
+                        labels: labels,
+                        datasets: [{
+                            data: values,
+                            backgroundColor: colors,
+                            borderColor: '#fff',
+                            borderWidth: 1
+                        }]
+                    },
+                    options: {
+                        responsive: true,
+                        plugins: {
+                            legend: {
+                                position: 'bottom'
+                            }
+                        }
+                    }
+                });
+            };
+
+            createChart('myDoughnutChart', 'doughnut');
+          
+        });
+
+    </script>
+</body>
+
+</html>

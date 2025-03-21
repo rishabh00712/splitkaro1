@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Expense</title>
+    <link rel="stylesheet" href="/styles/new.css">
+</head>
+
+<body>
+    <%- include('partials/notification.ejs') %>
+    <div class="container">
+        <!-- Header -->
+        <div class="header">
+            <button class="back-button" onclick="window.location.href='/home'">
+                &#x276E;
+            </button>
+        </div>
+
+        <!-- User Section -->
+        <div class="user-section">
+            <div class="add-friends">
+                <div class="circle">+</div>
+                <span class="label">Add Friends</span>
+            </div>
+
+        </div>
+
+        <!-- Recent Bills -->
+        <div class="recent-bills">
+            <div class="bill-pill">Bill 1</div>
+            <div class="bill-pill close">Bill 2 <span class="close-icon">x</span></div>
+        </div>
+
+        <!-- Category Icons -->
+        <div class="category-icons">
+            <div class="category-icon" style="background-color: #e8e0ff;">Q</div>
+            <div class="category-icon" style="background-color: #e0f0ff;">G</div>
+            <div class="category-icon" style="background-color: #fff5e0;">P</div>
+
+        </div>
+        <form action="/new" method="POST">
+            <div class="form-container">
+                <div class="form-row">
+                    <div class="form-field">
+                        <label class="form-label">Description</label>
+                        <input type="text" name="description" class="form-input" placeholder="Add a description"
+                            required>
+                    </div>
+                    <div class="form-field">
+                        <label class="form-label">Category</label>
+
+
+                        <select name="category" class="form-select" required>
+                            <option value="" disabled <%=!category ? 'selected' : '' %>>Select a category</option>
+                            <option value="Food" <%=category==='Food' ? 'selected' : '' %>>Food</option>
+                            <option value="Groceries" <%=category==='Groceries' ? 'selected' : '' %>>Groceries</option>
+                            <option value="Travel" <%=category==='Travel' ? 'selected' : '' %>>Travel</option>
+                            <option value="Stays" <%=category==='Stays' ? 'selected' : '' %>>Stays</option>
+                            <option value="Bills" <%=category==='Bills' ? 'selected' : '' %>>Bills</option>
+                            <option value="Subscription" <%=category===' Subscription' ? 'selected' : '' %>>Subscription
+                            </option>
+                            <option value="Shopping" <%=category==='Shopping' ? 'selected' : '' %>>Shopping</option>
+                            <option value="Gifts" <%=category==='Gifts' ? 'selected' : '' %>>Gifts</option>
+                            <option value="Drinks" <%=category==='Drinks' ? 'selected' : '' %>>Drinks</option>
+                            <option value="Fuel" <%=category==='Fuel' ? 'selected' : '' %>>Fuel</option>
+                            <option value="Udhhar" <%=category==='Udhhar' ? 'selected' : '' %>>Udhhar</option>
+                            <option value="Health" <%=category==='Health' ? 'selected' : '' %>>Health</option>
+                            <option value="Entertainment" <%=category==='Entertainment' ? 'selected' : '' %>
+                                >Entertainment</option>
+                            <option value="Others" <%=category==='Others' ? 'selected' : '' %>>Others</option>
+                        </select>
+
+
+
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-field">
+                        <label class="form-label">Price</label>
+                        <div style="display: flex; align-items: center;">
+                            <span style="margin-right: 5px;">₹</span>
+                            <input type="text" name="amount" class="form-input" value="<%= amount ? amount : '' %>"
+                                placeholder="Enter your amount " required>
+                        </div>
+                    </div>
+                    <div class="form-field">
+                        <label class="form-label">Paid By</label>
+                        <select name="you" class="form-select" required>
+                            <option value="" disabled selected>Select a option</option>
+                            <option value="you">You</option>
+                        </select>
+                    </div>
+                </div>
+
+                <!-- Split Section -->
+                <div class="split-section">
+                    <div class="split-label">Split</div>
+
+                    <div class="split-options">
+                        <div class="split-option active" onclick="setSplitType('equally')">Equally</div>
+                        <div class="split-option" onclick="setSplitType('unequally')">Unequally</div>
+                        <div class="split-option" onclick="setSplitType('itemwise')">Item wise</div>
+                    </div>
+
+                    <div class="split-among">Split among ( You to upfront )</div>
+
+                    <div class="you-split">
+                        <div class="you-label">You</div>
+                        <input type="number" class="amount-input" value="<%= amount ? amount : '0' %>" min="0"
+                            max="<%= amount ? amount : '200000' %>">
+                    </div>
+
+                    <div id="extra-inputs"></div>
+                </div>
+
+                <!-- Bill Options -->
+                <div class="bill-options">
+                    <div class="bill-option">
+                        <div class="category-icon" style="background-color: #e8e0ff;">🎥</div>
+                    </div>
+                    <div class="bill-option">
+                        📅 <input type="name" name="date" class="amount-input"
+                            value="<%= date || new Date().toISOString().split('T')[0] %> ">
+                    </div>
+                    <div class="bill-option">
+                        ⏰ <input type="name" name="time" class="amount-input"
+                            value="<%= time || (new Date().getHours() % 12 || 12) + ':' + String(new Date().getMinutes()).padStart(2, '0')  + (new Date().getHours() >= 12 ? ' PM' : ' AM') %>">
+                    </div>
+
+                </div>
+            </div>
+
+            <!-- Add More Button -->
+
+            <div class="add-more">
+                <a class="add-more-btn">Add more bills</a>
+            </div>
+
+
+
+            <!-- Submit Button -->
+            <div class="submit-container">
+                <button class="submit-btn">Submit expense</button>
+            </div>
+        </form>
+        <!-- Form Fields -->
+
+    </div>
+</body>
+
+<script>
+    function setSplitType(type) {
+        document.querySelectorAll('.split-option').forEach(option => option.classList.remove('active'));
+        event.target.classList.add('active');
+
+        let extraInputs = document.getElementById("extra-inputs");
+        extraInputs.innerHTML = ""; // Clear previous inputs
+
+
+    }
+</script>
+
+</html>

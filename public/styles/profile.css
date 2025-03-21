@@ -1,0 +1,262 @@
+        /* General Styles */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f8ff;
+            /* Light blue background */
+            color: #333;
+            text-align: center;
+        }
+
+        .container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+
+        /* Profile Picture */
+        .profile-pic {
+            width: 120px;
+            height: 120px;
+            border-radius: 10px;
+            /* Rounded corners */
+            background-color: #007bff;
+            margin: auto;
+        }
+
+        /* Form Styling */
+        .editable-field {
+            display: flex;
+            flex-direction: column;
+            /* Place button below input */
+            align-items: center;
+            margin-top: 15px;
+        }
+
+        input {
+            width: 300px;
+            padding: 8px;
+            font-size: 16px;
+            color: #333;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        input::placeholder {
+            color: #666;
+            /* Darker placeholder */
+            font-size: 14px;
+        }
+
+        button {
+            background-color: #007bff;
+            color: white;
+            border: none;
+            padding: 8px 12px;
+            margin-top: 5px;
+            border-radius: 5px;
+            cursor: pointer;
+            width: 120px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        /* Star Rating */
+        .stars {
+            margin: 20px 0;
+        }
+
+        .star {
+            font-size: 24px;
+            color: #ccc;
+        }
+
+        .star.green {
+            color: green;
+            /* One green star */
+        }
+
+        /* Pending Bills */
+        .pending-bills {
+            font-size: 14px;
+            color: #555;
+        }
+
+        /* Expense Section */
+        .expense-section {
+            margin-top: 20px;
+        }
+
+        .expense-category {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .star {
+            font-size: 24px;
+            color: gray;
+            /* Default gray */
+        }
+
+        .star.green {
+            color: green;
+            /* Highlighted star */
+        }
+
+        .profile-section {
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .profile-pic {
+            width: 150px;
+            height: 150px;
+            border-radius: 15px;
+            background: linear-gradient(135deg, #007bff, #00d4ff);
+            margin: 0 auto 20px auto;
+            display: block;
+        }
+
+        #profile-form {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+
+        .editable-field {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .editable-field input {
+            width: 300px;
+            padding: 10px;
+            font-size: 16px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            transition: border-color 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .editable-field input::placeholder {
+            color: #666;
+            font-size: 14px;
+        }
+
+        .editable-field input:focus {
+            border-color: #007bff;
+            box-shadow: 0 0 8px rgba(0, 123, 255, 0.3);
+            outline: none;
+        }
+
+        .editable-field button {
+            margin-top: 8px;
+            width: 150px;
+            padding: 10px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 8px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .editable-field button:hover {
+            background-color: #0056b3;
+            transform: scale(1.05);
+        }
+
+        
+.back-button {
+  width: 50px;
+  height: 50px;
+  border-radius: 50%;
+  border: none;
+  background-color: #f3f3f3;
+  /* Green */
+  color: rgb(14, 14, 14);
+  font-size: 24px;
+  font-weight: bold;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background 0.3s ease-in-out, transform 0.2s;
+  margin-left: 20px;
+}
+
+.back-button:hover {
+  background-color: #b7b7b7;
+  /* Darker Green */
+}
+
+
+/* Responsive: ensure new buttons follow similar adjustments */
+@media (max-width: 600px) {
+
+  .voice-add,
+  .back-button {
+    font-size: 14px;
+    padding: 6px 12px;
+  }
+}
+
+.button-containers {
+  width: 100%;
+  display: flex;
+  justify-content: start;
+}
+
+
+
+  /* Notification Container */
+  #notification-container {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    width: 300px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    z-index: 1000;
+  }
+
+  /* Notification Message */
+  .notification {
+    background-color: #ff4c4c;
+    color: white;
+    padding: 12px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    animation: slide-in 0.5s ease-out;
+  }
+
+  /* Slide in from right */
+  @keyframes slide-in {
+    from {
+      transform: translateX(100%);
+      opacity: 0;
+    }
+
+    to {
+      transform: translateX(0);
+      opacity: 1;
+    }
+  }
+
+  

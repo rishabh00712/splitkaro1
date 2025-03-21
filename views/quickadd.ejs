@@ -1,0 +1,268 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quick Add</title>
+  <link rel="stylesheet" href="styles.css"> <!-- Keep the same design -->
+</head>
+<link rel="stylesheet" href="/styles/addquick.css">
+
+<body>
+  <div id="notification-container"></div>
+
+  <div class="button-containers">
+   
+    <button class="back-button" onclick="window.location.href='/home'">
+      &#x276E;
+    </button>
+    
+  </div>
+  
+
+  <h1>Quick Add Expense</h1>
+  <div class="container">
+    <!-- Add Expense Form -->
+    <form action="/add-expense" method="POST" class="form-container" >
+      <div class="input-group">
+        <!-- Amount Input and Button -->
+        <div class="form-group">
+          <label for="amount" class="form-label">Amount:</label>
+          <div class="amount-input">
+            <input type="number" name="amount" id="amount" min="0" placeholder="Enter amount" required>
+            <!-- This button increments the amount; note its type is button so it doesn't submit the form -->
+            <button type="button" id="increase-amount">+500</button>
+          </div>
+        </div>
+
+        <!-- Category Selection -->
+        <div class="form-group">
+          <label for="category" class="form-label">Category:</label>
+          <select name="category" id="category" required>
+            <option value="" disabled selected>Select a category</option>
+            <option value="Food">Food</option>
+            <option value="Groceries">Groceries</option>
+            <option value="Travel">Travel</option>
+            <option value="Stays">Stays</option>
+            <option value="Bills">Bills</option>
+            <option value="Subscription">Subscription</option>
+            <option value="Shopping">Shopping</option>
+            <option value="Gifts">Gifts</option>
+            <option value="Drinks">Drinks</option>
+            <option value="Fuel">Fuel</option>
+            <option value="Udhhar">Udhhar</option>
+            <option value="Health">Health</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Others">Others</option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Add Expense Button -->
+      <div class="button-container">
+        <button id="add-expense">Add Expense</button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Expense Table -->
+  <!-- Expense Table -->
+  <div class="table-container">
+    <table border="1">
+      <thead>
+        <tr>
+          <th>Amount</th>
+          <th>Category</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% expenses.forEach(expense=> { %>
+          <tr>
+            <td>
+              <%= expense.amount %>
+            </td>
+            <td>
+              <%= expense.category %>
+            </td>
+            <td>
+              <%= expense.date %>
+            </td>
+            <td>
+              <%= expense.time %>
+            </td>
+            <td>
+              <button class="edit" onclick=" editRow(this.parentNode.parentNode,'<%= expense.id %>')">Edit</button>
+
+              <button class="delete" onclick="location.href='/delete_expense/<%= expense.id %>'">Delete</button>
+              <button class="add" onclick="location.href='/add/<%= expense.id %>'">Add</button>
+            </td>
+          </tr>
+          <% }); %>
+      </tbody>
+    </table>
+  </div>
+
+  <script>
+    let id=0;
+    let par;
+    // Function to show a toast notification
+
+
+    // Increase the amount by 500 when the button is pressed
+    document.getElementById('increase-amount').addEventListener('click', () => {
+      let amountInput = document.getElementById('amount');
+      let currentValue = parseInt(amountInput.value) || 0;
+      amountInput.value = currentValue + 500;
+    });
+    let notificationMessage = "node";
+
+    // Display notification if a message is provided from the backend (e.g., via flash messages)
+
+
+    function editRow(row, pid) {
+  let par = row;
+  let id = pid;
+  
+  const cells = row.querySelectorAll("td");
+  const amountCell = cells[0];
+  const categoryCell = cells[1];
+  const actionsCell = cells[4];
+
+  // Get original values (cleaning up the amount to remove non-numeric characters if needed)
+  const originalAmount = amountCell.textContent.trim().replace(/[^0-9.]/g, '');
+  const originalCategory = categoryCell.textContent.trim();
+  console.log("Original Amount:", originalAmount);
+  
+  // Convert the cells to input fields with inline CSS for the amount
+  amountCell.innerHTML = `<input type="number" value="${originalAmount}" min="0" 
+    style="width: 80px; padding: 5px; font-size: 14px; border: 1px solid #ccc; border-radius: 4px; outline: none;">`;
+
+  categoryCell.innerHTML = `
+   <select name="category" id="category" required>
+            <option value="" disabled selected>Select a category</option>
+            <option value="Food">Food</option>
+            <option value="Groceries">Groceries</option>
+            <option value="Travel">Travel</option>
+            <option value="Stays">Stays</option>
+            <option value="Bills">Bills</option>
+            <option value="Subscription">Subscription</option>
+            <option value="Shopping">Shopping</option>
+            <option value="Gifts">Gifts</option>
+            <option value="Drinks">Drinks</option>
+            <option value="Fuel">Fuel</option>
+            <option value="Udhhar">Udhhar</option>
+            <option value="Health">Health</option>
+            <option value="Entertainment">Entertainment</option>
+            <option value="Others">Others</option>
+          </select>
+  `;
+  // Set dropdown to original category
+  categoryCell.querySelector("select").value = originalCategory;
+
+  // Change action buttons to Save and Cancel
+  actionsCell.innerHTML = `
+    <button class="save">Save</button>
+    <button class="cancel">Cancel</button>
+  `;
+
+  // Save button functionality: update the row in the DOM
+  actionsCell.querySelector(".save").addEventListener("click", () => {
+    const newAmount = amountCell.querySelector("input").value.trim() || originalAmount;
+    const newCategory = categoryCell.querySelector("select").value || originalCategory;
+
+    console.log("Updated Amount:", newAmount);
+    console.log("Updated Category:", newCategory);
+
+    // Update the row content in the DOM
+    amountCell.textContent = newAmount;
+    categoryCell.textContent = newCategory;
+
+    // Restore the actions to normal
+    restoreActions(row);
+  });
+
+  // Cancel button: revert changes in the DOM without calling the backend
+  actionsCell.querySelector(".cancel").addEventListener("click", () => {
+    amountCell.textContent = originalAmount;
+    categoryCell.textContent = originalCategory;
+
+    // Restore the actions to normal
+    restoreActions(row);
+  });
+}
+
+
+
+
+    function restoreActions(row) {
+      const actionsCell = row.cells[4];
+      // Restore Edit and Delete buttons
+      actionsCell.innerHTML = `
+    <button class="edit" onclick=" editRow(${par,id})">Edit</button>
+    <button class="delete" onclick="location.href='/delete_expense/${id}'">Delete</button>
+    <button class="add" onclick="location.href='/add/${id}'">Add</button>
+  `;
+      // Attach event listeners again
+      actionsCell.querySelector('.edit').addEventListener('click', () => editRow(row));
+
+    }
+
+    function showNotification(message) {
+      const container = document.getElementById("notification-container");
+
+      // Create a notification div
+      const notification = document.createElement("div");
+      notification.classList.add("notification");
+      notification.innerText = message;
+
+      // Add to notification container
+      container.prepend(notification); // Newest on top
+
+      // Auto-remove after 4 seconds
+      setTimeout(() => {
+        notification.classList.add("fade-out"); // Start fade-out effect
+        setTimeout(() => notification.remove(), 500); // Remove from DOM
+      }, 4000);
+    }
+    document.getElementById('add-expense').addEventListener('click', () => {
+      const amount = document.getElementById('amount').value.trim();
+      const category = document.getElementById('category').value;
+
+      if (!amount || Number(amount) <= 0 || category === "") {
+        showNotification("Please enter a valid amount and select a category.");
+        return;
+      }else{
+        
+      }
+
+      // Send POST request to backend
+      fetch('/add-expense', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ amount, category })
+      })
+        .then(response => response.json())
+        .then(data => {
+          if (data.success) {
+            showNotification("Expense added successfully!");
+            location.reload(); // Reload the page to update the expenses list
+          } else {
+            showNotification("Failed to add expense. Please try again.");
+          }
+        })
+        .catch(error => {
+          console.error("Error adding expense:", error);
+          showNotification("An error occurred. Please try again.");
+        });
+    });
+
+
+
+  </script>
+</body>
+
+</html>

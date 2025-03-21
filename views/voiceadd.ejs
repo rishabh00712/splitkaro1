@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Natural Voice Expense Tracker</title>
+  <link rel="stylesheet" href="/styles/voiceadd.css">
+</head>
+
+<body>
+  <div class="button-containers">
+   
+    <button class="back-button" onclick="window.location.href='/home'">
+      &#x276E;
+    </button>
+    
+  </div>
+  <h1>Natural Voice Expense Tracker</h1>
+  <!-- Notification container for error/success messages -->
+  <div id="notification-container"></div>
+
+  <button id="start-btn">Start Recording</button>
+  <p id="status">Click and speak naturally</p>
+  <div id="error-msg"></div>
+
+  <!-- Expense Table -->
+  <table id="data-table">
+    <thead>
+      <tr>
+        <th>Amount</th>
+        <th>Category</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody id="table-body">
+    </tbody>
+  </table>
+
+  <script>
+    // Custom notification function
+    function showNotification(message) {
+      const container = document.getElementById("notification-container");
+
+      // Create a notification div
+      const notification = document.createElement("div");
+      notification.classList.add("notification");
+      notification.innerText = message;
+
+      // Add to notification container (newest on top)
+      container.prepend(notification);
+
+      // Auto-remove after 4 seconds
+      setTimeout(() => {
+        notification.classList.add("fade-out");
+        setTimeout(() => notification.remove(), 500);
+      }, 4000);
+    }
+
+    // Speech recognition setup
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    let recognition;
+    if (!SpeechRecognition) {
+      alert("Browser doesn't support Speech Recognition");
+    } else {
+      recognition = new SpeechRecognition();
+      recognition.lang = 'en-US';
+      recognition.interimResults = false;
+      recognition.maxAlternatives = 1;
+    }
+
+    const categories = {
+      Food: ['food', 'restaurant', 'meal', 'lunch', 'dinner'],
+      Groceries: ['groceries', 'supermarket', 'market', 'produce'],
+      Travel: ['travel', 'journey', 'trip', 'flight', 'airfare'],
+      Stays: ['stays', 'hotel', 'accommodation', 'motel', 'lodge'],
+      Bills: ['bills', 'electricity', 'water', 'internet', 'gas', 'bill', 'rent'],
+      Subscription: ['subscription', 'service', 'membership', 'recurring'],
+      Shopping: ['shopping', 'mall', 'store', 'retail', 'clothes'],
+      Gifts: ['gifts', 'present', 'surprise', 'girl friend'],
+      Drinks: ['drinks', 'beverage', 'coffee', 'tea', 'soda'],
+      Fuel: ['fuel', 'gas', 'petrol', 'diesel'],
+      Udhhar: ['udhhar', 'debt', 'loan', 'credit'],
+      Health: ['health', 'medicine', 'pharmacy', 'doctor', 'hospital'],
+      Entertainment: ['entertainment', 'movie', 'concert', 'game', 'fun'],
+      Others: ['others', 'miscellaneous', 'various']
+    };
+
+
+    // Parse the transcript into fields.
+    function parseSpeech(transcript) {
+      // Amount detection (first number)
+      const amount = transcript.match(/(\d+)(?:\s*(?:rs|rupees|dollars))?/i)?.[1] || '';
+
+      // Date detection
+      let date = new Date();
+      const dateStrings = {
+        yesterday: () => new Date(date.setDate(date.getDate() - 1)),
+        tomorrow: () => new Date(date.setDate(date.getDate() + 1)),
+        'next week': () => new Date(date.setDate(date.getDate() + 7))
+      };
+
+      const dateMatch = transcript.match(/(today|yesterday|tomorrow|next week|\d{4}-\d{2}-\d{2})/i);
+      if (dateMatch) {
+        const matched = dateMatch[0].toLowerCase();
+        if (dateStrings[matched]) {
+          date = dateStrings[matched]();
+        } else if (matched.match(/\d{4}-\d{2}-\d{2}/)) {
+          date = new Date(matched);
+        }
+      }
+
+      // Category detection
+      const lowerTranscript = transcript.toLowerCase();
+      let category = '';
+      for (const [cat, keywords] of Object.entries(categories)) {
+        if (keywords.some(word => lowerTranscript.includes(word))) {
+          category = cat;
+          break;
+        }
+      }
+
+      // Time detection: using current system time
+      const time = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+
+      return {
+        amount,
+        category,
+        date: date.toISOString().split('T')[0],
+        time
+      };
+    }
+
+    let amount;
+    let catagory;
+
+    const defaultStatusText = 'Click and speak naturally (e.g., "200 for groceries at Walmart yesterday")';
+    const startBtn = document.getElementById('start-btn');
+    const statusPara = document.getElementById('status');
+    const errorMsgDiv = document.getElementById('error-msg');
+    const tableBody = document.getElementById('table-body');
+    const expenseForm = document.getElementById('expense-form');
+
+    // Remove or change the status message calls from start button events.
+    startBtn.addEventListener('click', () => {
+      if (recognition) {
+        if (startBtn.textContent === 'Start Recording') {
+          recognition.start();
+          startBtn.textContent = 'Stop Recording';
+          startBtn.classList.add('loading');
+          // No notification is shown when starting recording.
+        } else {
+          recognition.stop();
+          startBtn.textContent = 'Start Recording';
+          startBtn.classList.remove('loading');
+          // No notification is shown when stopping recording.
+        }
+      }
+    });
+
+    if (recognition) {
+      recognition.onresult = (event) => {
+        const transcript = event.results[0][0].transcript;
+        const details = parseSpeech(transcript);
+        console.log(details);
+        amount=details.amount;
+        catagory=details.category;
+
+        if (!details.amount) {
+          // Instead of updating the errorMsgDiv, use our custom notification.
+          showNotification("Your voice wasn't recognized clearl "+transcript);
+          return;
+        }
+
+        addRow(details.amount, details.category || '', details.date || '', details.time || '');
+        showNotification("Your voice is "+transcript);
+      };
+
+      recognition.onerror = (event) => {
+        showNotification("Error: " + event.error);
+      };
+
+      recognition.onend = () => {
+        startBtn.classList.remove('loading');
+      };
+    }
+
+    // Function to add a new row in the table.
+    function addRow(amount, category, date, time) {
+      const row = document.createElement('tr');
+      console.log(amount);
+      row.innerHTML = `
+        <td>${amount}</td>
+        <td>${category || 'N/A'}</td>
+        <td>${date || 'N/A'}</td>
+        <td>${time || 'N/A'}</td>
+        <td>
+          <button class="edit">Edit</button>
+          <button class="delete">Delete</button>
+          <button class="add">Add</button>
+        </td>
+      `;
+      row.querySelector('.delete').addEventListener('click', () => row.remove());
+      row.querySelector('.edit').addEventListener('click', () => inlineEdit(row));
+      row.querySelector('.add').addEventListener('click', () => sendAddRequest({ amount, category, date, time }));
+      tableBody.appendChild(row);
+    }
+
+    // Inline editing: allow editing of only Amount and Category.
+    function inlineEdit(row) {
+      const originalAmount = row.cells[0].textContent;
+      const originalCategory = row.cells[1].textContent;
+
+      for (let i = 0; i < 2; i++) {
+        const input = document.createElement('input');
+        input.type = 'text';
+        input.value = row.cells[i].textContent === 'N/A' ? '' : row.cells[i].textContent;
+        row.cells[i].innerHTML = '';
+        row.cells[i].appendChild(input);
+      }
+
+      const actionsCell = row.cells[4];
+      actionsCell.innerHTML = '';
+
+      const saveBtn = document.createElement('button');
+      saveBtn.type = 'button';
+      saveBtn.textContent = 'Save';
+      const cancelBtn = document.createElement('button');
+      cancelBtn.type = 'button';
+      cancelBtn.textContent = 'Cancel';
+
+      saveBtn.addEventListener('click', () => {
+        const newAmount = row.cells[0].querySelector('input').value.trim() || 'N/A';
+        const newCategory = row.cells[1].querySelector('input').value.trim() || 'N/A';
+        row.cells[0].textContent = newAmount;
+        row.cells[1].textContent = newCategory;
+        restoreActions(row);
+      });
+
+      cancelBtn.addEventListener('click', () => {
+        row.cells[0].textContent = originalAmount;
+        row.cells[1].textContent = originalCategory;
+        restoreActions(row);
+      });
+
+      actionsCell.appendChild(saveBtn);
+      actionsCell.appendChild(cancelBtn);
+    }
+
+    function restoreActions(row) {
+  const actionsCell = row.cells[4];
+  actionsCell.innerHTML = '';
+
+  const editBtn = document.createElement('button');
+  editBtn.type = 'button';
+  editBtn.textContent = 'Edit';
+
+  const deleteBtn = document.createElement('button');
+  deleteBtn.type = 'button';
+  deleteBtn.textContent = 'Delete';
+
+  const addBtn = document.createElement('button');
+  addBtn.type = 'button';
+  addBtn.textContent = 'Add';
+
+  editBtn.addEventListener('click', () => inlineEdit(row));
+  deleteBtn.addEventListener('click', () => row.remove());
+  addBtn.addEventListener('click', () => sendAddRequest(10));
+
+  actionsCell.appendChild(editBtn);
+  actionsCell.appendChild(deleteBtn);
+  actionsCell.appendChild(addBtn);
+}
+
+
+    function sendAddRequest(expenseData) {
+      console.log(expenseData);
+      fetch('/add-voice', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({amount,catagory}),
+      })
+        .then(response => {
+          if (response.ok) {
+            showNotification('Expense added successfully.');
+          } else {
+            showNotification('Failed to add expense.');
+          }
+        })
+        .catch(error => {
+          console.error('Error:', error);
+          showNotification('An error occurred.');
+        });
+    }
+
+    // Intercept form submission (if expenseForm exists)
+    if (expenseForm) {
+      expenseForm.addEventListener('submit', function (e) {
+        e.preventDefault();  // Prevent normal form submission
+
+        // Collect expense data from table rows
+        const expenses = [];
+        const rows = tableBody.querySelectorAll('tr');
+        rows.forEach(row => {
+          const cells = row.querySelectorAll('td');
+          expenses.push({
+            amount: cells[0].textContent,
+            category: cells[1].textContent,
+            date: cells[2].textContent,
+            time: cells[3].textContent
+          });
+        });
+
+        fetch('/api/expenses', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ expenses })
+        })
+          .then(response => {
+            if (response.ok) {
+              showNotification("Expenses submitted successfully!");
+              tableBody.innerHTML = '';
+            } else {
+              showNotification("Failed to submit expenses.");
+            }
+          })
+          .catch(error => {
+            console.error('Error:', error);
+            showNotification("Error submitting expenses.");
+          });
+      });
+    }
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,108 @@
+CREATE TABLE IF NOT EXISTS user_info (
+    id SERIAL PRIMARY KEY, 
+    name VARCHAR(100) NOT NULL, 
+    maxi_amount DECIMAL(10,2) NOT NULL,
+    stars INT DEFAULT 0,
+    payment_intime INT,
+    late_payment INT
+);
+
+CREATE TABLE IF NOT EXISTS payment_panding ( 
+    id INTEGER, 
+    category VARCHAR(100) NOT NULL,
+    description TEXT,
+    payment DECIMAL(10,2),
+    date VARCHAR(50),  -- Specify a length for VARCHAR
+    time VARCHAR(50)   -- Corrected "verchar" to "VARCHAR"
+);
+
+CREATE TABLE IF NOT EXISTS groups (  
+    id SERIAL PRIMARY KEY, 
+    category VARCHAR(100) NOT NULL,
+    description TEXT,
+    payment DECIMAL(10,2),
+    date VARCHAR(50),  -- Keeping VARCHAR for date
+    time VARCHAR(50)   -- Keeping VARCHAR for time
+);
+
+CREATE TABLE IF NOT EXISTS transactions (
+    id INTEGER, 
+    category VARCHAR(100) NOT NULL,
+    amount DECIMAL(10,2) NOT NULL,
+    date VARCHAR(50),  
+    time VARCHAR(50)
+);
+
+CREATE TABLE IF NOT EXISTS users (
+        email VARCHAR(255) PRIMARY KEY,
+        password TEXT NOT NULL
+
+
+)
+await client.query(`
+            CREATE TABLE IF NOT EXISTS catagory_payment (
+                id SERIAL PRIMARY KEY, 
+                category VARCHAR(100) NOT NULL, 
+                total_spend DECIMAL(10,2) NOT NULL, 
+                
+            );
+        `);
+
+
+
+await client.query(`
+    INSERT INTO users (email, password) 
+    VALUES ('test@gmail.com', 'test123');
+`);
+console.log("User inserted successfully ✅");
+
+
+
+import pkg from 'pg';
+
+const { Client } = pkg;
+
+// Your NeonDB Connection String
+const connectionString = "postgresql://neondb_owner:npg_vdarNmEJT47s@ep-round-pond-a7j522v5-pooler.ap-southeast-2.aws.neon.tech/neondb?sslmode=require";
+
+// Initialize PostgreSQL Client
+const client = new Client({
+    connectionString,
+    ssl: { rejectUnauthorized: false }, // Required for NeonDB
+});
+
+const createUsersTable = async () => {
+    try {
+        await client.connect(); // Connect to the database
+        console.log("Connected to NeonDB ✅");
+
+        await client.query(`
+            INSERT INTO catagory_payment (category, total_spend) VALUES
+            ('Food', 800),
+            ('Groceries', 2000),
+            ('Travel', 0),
+            ('Stays', 3000),
+            ('Bills', 100),
+            ('Subscription', 199),
+            ('Shopping', 300),
+            ('Gifts', 0),
+            ('Drinks', 1000),
+            ('Fuel', 200),
+            ('Udhhar', 0),
+            ('Health', 0),
+            ('Entertainment', 0),
+            ('Others',2000)
+        `);
+
+
+        console.log("Table 'users' created successfully ✅");
+
+    } catch (err) {
+        console.error("Error creating table ❌", err);
+    } finally {
+        await client.end(); // Close the connection
+    }
+};
+
+// Run the function
+createUsersTable();

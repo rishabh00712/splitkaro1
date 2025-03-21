@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Polar Area Chart in EJS</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+
+    <h2>Category Spending</h2>
+    <canvas id="myPolarChart"></canvas>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const ctx = document.getElementById('myPolarChart').getContext('2d');
+
+            const myPolarChart = new Chart(ctx, {
+                type: 'polarArea',
+                data: {
+                    labels: ['Food', 'Travel', 'Shopping', 'Bills', 'Entertainment'], // Categories
+                    datasets: [{
+                        data: [500, 300, 400, 200, 350], // Amount spent per category
+                        backgroundColor: ['#ff6384', '#36a2eb', '#ffce56', '#4bc0c0', '#9966ff'], // Colors
+                        borderColor: ['#fff', '#fff', '#fff', '#fff', '#fff'],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            position: 'bottom' // Moves legend to bottom
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,537 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: Arial, sans-serif;
+}
+
+body {
+    background-color: #f8f8f8;
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+}
+
+.container {
+    width: 100%;
+    max-width: 400px;
+    background-color: white;
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* Header */
+.header {
+    display: flex;
+    align-items: center;
+    padding: 15px;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.back-arrow {
+    margin-right: 15px;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+.title {
+    font-size: 18px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* User Section */
+.user-section {
+    display: flex;
+    padding: 15px;
+    gap: 30px;
+}
+
+.add-friends,
+.you-profile {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+}
+
+.circle {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 5px;
+}
+
+.add-friends .circle {
+    background-color: #000;
+    color: white;
+    font-size: 22px;
+    cursor: pointer;
+}
+
+.you-profile .circle {
+    background-color: #f0f0f0;
+    overflow: hidden;
+}
+
+.profile-img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.label {
+    font-size: 12px;
+    color: #333;
+}
+
+/* Recent Bills */
+.recent-bills {
+    display: flex;
+    gap: 10px;
+    padding: 0 15px 10px;
+    flex-wrap: wrap;
+}
+
+.bill-pill {
+    background-color: #fff9e5;
+    border-radius: 15px;
+    padding: 5px 10px;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+}
+
+.bill-pill.close {
+    padding-right: 5px;
+}
+
+.close-icon {
+    margin-left: 5px;
+    font-size: 16px;
+    color: #999;
+    cursor: pointer;
+}
+
+/* Category Icons */
+.category-icons {
+    display: flex;
+    padding: 15px;
+    gap: 12px;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+
+.category-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+/* Form Fields */
+.form-container {
+    padding: 0 15px;
+}
+
+.form-row {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+    margin-bottom: 15px;
+}
+
+.form-field {
+    flex: 1;
+    min-width: 150px;
+}
+
+.form-label {
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 5px;
+    display: block;
+}
+
+.form-input,
+.form-select {
+    width: 100%;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 14px;
+    color: #333;
+}
+
+/* Split Section */
+.split-section {
+    margin-bottom: 15px;
+}
+
+.split-label {
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 8px;
+}
+
+.split-options {
+    display: flex;
+    background-color: #f5f5f5;
+    border-radius: 20px;
+    overflow: hidden;
+    margin-bottom: 15px;
+}
+
+.split-option {
+    flex: 1;
+    text-align: center;
+    padding: 8px 0;
+    font-size: 14px;
+    color: #666;
+    cursor: pointer;
+}
+
+.split-option.active {
+    background-color: #5f5df5;
+    color: white;
+    border-radius: 20px;
+}
+
+.split-among {
+    font-size: 12px;
+    color: #999;
+    margin-bottom: 10px;
+}
+
+.you-split {
+    display: flex;
+    margin-bottom: 15px;
+}
+
+.you-label {
+    background-color: #ffc74c;
+    color: white;
+    padding: 8px 15px;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    font-size: 14px;
+}
+
+.amount-input {
+    border: 1px solid #ddd;
+    border-left: none;
+    padding: 8px 15px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    width: auto;
+    text-align: center;
+}
+
+/* Bill Options */
+.bill-options {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 20px;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.bill-option {
+    display: flex;
+    align-items: center;
+    font-size: 12px;
+    color: #666;
+    cursor: pointer;
+}
+
+.bill-option i {
+    margin-right: 5px;
+    color: #999;
+    font-size: 16px;
+}
+
+/* Add More Button */
+.add-more {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.add-more-btn {
+    background-color: transparent;
+    border: 1px solid #5f5df5;
+    color: #5f5df5;
+    padding: 8px 20px;
+    border-radius: 20px;
+    font-size: 14px;
+    cursor: pointer;
+    display: inline-flex;
+    align-items: center;
+}
+
+.add-more-btn:before {
+    content: "+";
+    margin-right: 5px;
+}
+
+/* Submit Button */
+.submit-container {
+    background-color: #000;
+    padding: 15px;
+}
+
+.submit-btn {
+    background-color: #000;
+    color: white;
+    border: none;
+    width: 100%;
+    padding: 15px 0;
+    font-size: 16px;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* Responsive Media Queries */
+
+/* Tablet View */
+@media (min-width: 768px) and (max-width: 1024px) {
+    .container {
+        max-width: 700px;
+    }
+
+    .user-section {
+        gap: 50px;
+        justify-content: flex-start;
+    }
+
+    .category-icons {
+        justify-content: flex-start;
+        gap: 20px;
+    }
+
+    .category-icon {
+        width: 45px;
+        height: 45px;
+        font-size: 16px;
+    }
+
+    .form-container {
+        padding: 0 25px;
+    }
+
+    .form-row {
+        flex-wrap: nowrap;
+    }
+
+    .bill-options {
+        justify-content: flex-start;
+        gap: 30px;
+    }
+}
+
+/* Desktop View */
+@media (min-width: 1025px) {
+    .container {
+        max-width: 900px;
+        display: flex;
+        flex-direction: column;
+    }
+
+    .header {
+        padding: 20px;
+    }
+
+    .title {
+        font-size: 22px;
+    }
+
+    .user-section {
+        gap: 60px;
+        padding: 20px;
+    }
+
+    .circle {
+        width: 50px;
+        height: 50px;
+        font-size: 24px;
+    }
+
+    .label {
+        font-size: 14px;
+    }
+
+    .category-icons {
+        padding: 20px;
+        gap: 25px;
+        justify-content: flex-start;
+    }
+
+    .category-icon {
+        width: 50px;
+        height: 50px;
+        font-size: 18px;
+    }
+
+    .form-container {
+        padding: 0 30px;
+    }
+
+    .form-row {
+        gap: 30px;
+    }
+
+    .form-label {
+        font-size: 14px;
+    }
+
+    .form-input,
+    .form-select {
+        padding: 12px;
+        font-size: 16px;
+    }
+
+    .split-label,
+    .split-among {
+        font-size: 14px;
+    }
+
+    .split-option {
+        padding: 10px 0;
+        font-size: 16px;
+    }
+
+    .bill-options {
+        justify-content: flex-start;
+        gap: 40px;
+    }
+
+    .bill-option {
+        font-size: 14px;
+    }
+
+    .add-more-btn {
+        padding: 10px 25px;
+        font-size: 16px;
+    }
+
+    .submit-btn {
+        padding: 18px 0;
+        font-size: 18px;
+    }
+}
+
+/* Add this CSS to your existing styles */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.container>* {
+    opacity: 0;
+    animation: fadeInUp 0.5s ease forwards;
+}
+
+/* Stagger animation delays for each direct child */
+.container>*:nth-child(1) {
+    animation-delay: 0.2s;
+}
+
+.container>*:nth-child(2) {
+    animation-delay: 0.4s;
+}
+
+.container>*:nth-child(3) {
+    animation-delay: 0.6s;
+}
+
+.container>*:nth-child(4) {
+    animation-delay: 0.8s;
+}
+
+.container>*:nth-child(5) {
+    animation-delay: 1.0s;
+}
+
+.container>*:nth-child(6) {
+    animation-delay: 1.2s;
+}
+
+.container>*:nth-child(7) {
+    animation-delay: 1.4s;
+}
+
+/* Animate form elements sequentially */
+.form-container>* {
+    opacity: 0;
+    animation: fadeInUp 0.4s ease forwards;
+}
+
+.form-container>*:nth-child(1) {
+    animation-delay: 1.0s;
+}
+
+.form-container>*:nth-child(2) {
+    animation-delay: 1.2s;
+}
+
+.form-container>*:nth-child(3) {
+    animation-delay: 1.4s;
+}
+
+.form-container>*:nth-child(4) {
+    animation-delay: 1.6s;
+}
+
+/* Animate split options */
+.split-options>* {
+    opacity: 0;
+    animation: fadeInUp 0.3s ease forwards;
+}
+
+.split-options>*:nth-child(1) {
+    animation-delay: 1.6s;
+}
+
+.split-options>*:nth-child(2) {
+    animation-delay: 1.8s;
+}
+
+.split-options>*:nth-child(3) {
+    animation-delay: 2.0s;
+}
+
+
+.back-button {
+width: 50px;
+height: 50px;
+border-radius: 50%;
+border: none;
+background-color: #f3f3f3;
+/* Green */
+color: rgb(14, 14, 14);
+font-size: 24px;
+font-weight: bold;
+display: flex;
+justify-content: center;
+align-items: center;
+cursor: pointer;
+transition: background 0.3s ease-in-out, transform 0.2s;
+}
+
+.back-button:hover {
+background-color: #b7b7b7;
+/* Darker Green */
+}

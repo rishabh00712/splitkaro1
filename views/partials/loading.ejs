@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>SplitKaro Logo (Approx)</title>
+  <style>
+    /* Full-screen wrapper to center the logo */
+    .wrapper {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: #7bb8fa;
+      z-index: 2000000000000000000000000000;
+    }
+
+    .logo {
+      position: relative;
+      width: 120px;
+      height: 120px;
+      opacity: 0;
+      animation: fadeIn 1s forwards;
+    }
+
+    .diamond {
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      border: 20px solid rgb(241, 241, 241);
+      border-radius: 15px;
+      transform: rotate(45deg);
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .diamond1 {
+      top: -50px;
+      right: 10px;
+      z-index: 2;
+    }
+
+    .diamond2 {
+      top: 45px;
+      right: 6px;
+      z-index: 1;
+      animation-delay: 1.5s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    @keyframes float {
+      0%, 100% {   opacity: 1; }
+      50% { opacity: 0.3; }
+    }
+  </style>
+</head>
+
+<div class="wrapper">
+  <div class="logo">
+    <div class="diamond diamond1"></div>
+    <div class="diamond diamond2"></div>
+  </div>
+</div>
+
+<script>
+  setTimeout(() => {
+    document.querySelector('.wrapper').style.display = 'none';
+  }, 3000); // Hide after 4 seconds
+</script>
+
+</html>

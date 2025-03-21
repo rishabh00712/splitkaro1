@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Account Settings</title>
+    <link rel="stylesheet" href="/styles/submit.css">
+    <style>
+
+        
+    </style>
+</head>
+<body>
+    <div id="notification-container"></div>
+    <div class="form-container" >
+        <h2>Account Settings</h2>
+        <form action="/submitinfo" method="Post">
+            <div class="input-group">
+                <input type="text" required name="name" placeholder=" " value="Rishabh Garai">
+                <label>Full Name</label>
+            </div>
+            <div class="input-group">
+                <input type="number" name="amount" required placeholder=" " value="25000" step="100">
+                <label>Maximum Amount for This Month ($)</label>
+            </div>
+            <button type="submit">Update Information</button>
+            <p class="info-note">You may change this information later</p>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener("DOMContentLoaded", () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const errorMessage = urlParams.get("error");
+            const successMessage = urlParams.get("success");
+
+            if (errorMessage) showNotification(errorMessage, "error");
+            if (successMessage) showNotification(successMessage, "success");
+        });
+
+        function showNotification(message, type) {
+            const container = document.getElementById("notification-container");
+            if (!container) return;
+
+            const notification = document.createElement("div");
+            notification.classList.add("notification", type); // Add type for styling
+            notification.innerText = message;
+
+            container.prepend(notification); // Newest message on top
+
+            setTimeout(() => {
+                notification.classList.add("fade-out"); // Start fade-out effect
+                setTimeout(() => notification.remove(), 500); // Remove from DOM
+            }, 4000);
+        }
+    </script>
+</body>
+</html>

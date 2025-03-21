@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Ausham Style Expense Tracker</title>
+  <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Roboto:wght@300;500&display=swap"
+    rel="stylesheet">
+  <link rel="stylesheet" href="/styles/home.css">
+
+</head>
+
+<body>
+  <%- include('partials/loading.ejs') %>
+   <!-- Next Page Popup -->
+   <div id="nextpage">
+    <button onclick="window.location.href='/quickadd'">Quick Add</button>
+    <button onclick="window.location.href='/voiceadd'">Voice Add</button>    
+  </div>
+  <div class="container">
+  
+    <!-- Header Section -->
+    <div class="header">
+      <a href="./profile"><div class="profile">👤</div></a> 
+      <% if (notifications && notifications.length> 0) { %>
+        <div id="notification-container" data-notifications='<%= JSON.stringify(notifications) %>'></div>
+        <% } %>
+
+
+    </div>
+
+    <!-- Image Section -->
+    <div class="image-section">
+      💸 Expense Tracker
+    </div>
+
+    <!-- Groups Section -->
+      <a href="/new">
+        <div class="groups-section" >
+          <div class="group add-group">+</div> <!-- "+" button at the end -->
+    </div>
+      </a>
+      
+     
+
+
+        <!-- Bottom Section -->
+
+        <div id="history">
+          <!-- History Heading -->
+          <div id="heading-history">
+              <h1>History</h1>
+          </div>
+      
+          <!-- Table Headers -->
+          <div class="history-table header">
+              <div>Category</div>
+              <div>Description</div>
+              <div>Payment Amount</div>
+              <div>Date</div>
+              <div>Time</div>
+          </div>
+          <a href="#" >
+            <div class="history-table row" style="background-color: #ffcccc; transition: background 0.3s;">
+
+                <div>Bill</div>
+                <div>Water Bill payment</div>
+                <div>200</div>
+                <div>20/02/25</div>
+                <div>9.10 Am</div>
+            </div>
+          </a>
+
+          <% if (pendings && pendings.length > 0) { %>
+            <% pendings.forEach(pending => { %>
+                <a href="#">
+                    <div class="history-table row">
+                        <div><%= pending.category %></div>
+                        <div><%= pending.description %></div>
+                        <div><%= pending.payment %></div>
+                        <div><%= pending.date %></div>
+                        <div><%= pending.time %></div>
+                    </div>
+                </a>
+            <% }) %>
+        <% } %>
+
+          <!-- Table Data -->
+          <% if (groups && groups.length > 0) { %>
+              <% groups.forEach(group => { %>
+                  <a href="#">
+                      <div class="history-table row">
+                          <div><%= group.category %></div>
+                          <div><%= group.description %></div>
+                          <div><%= group.payment %></div>
+                          <div><%= group.date %></div>
+                          <div><%= group.time %></div>
+                      </div>
+                  </a>
+              <% }) %>
+          <% } %>
+      </div>
+
+
+      </div>
+
+        <!-- Floating Add Button -->
+        <button class="floating-add-btn" onclick="toggleNextPage()">+</button>
+
+  </div>
+</body>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+  const container = document.getElementById("notification-container");
+  const notifications = JSON.parse(container.getAttribute("data-notifications"));
+  let index = 0; // Track notification index
+
+  function showNotification() {
+    if (index >= notifications.length) return; // Stop if all notifications are shown
+
+    // Create notification div
+    const notificationDiv = document.createElement("div");
+    notificationDiv.className = "notification";
+    notificationDiv.innerHTML = `🔔 ${notifications[index]}`;
+
+    // Create OK button
+    const okButton = document.createElement("button");
+    okButton.className = "ok-button";
+    okButton.innerText = "OK";
+
+    // Remove notification when clicking "OK" and show the next one
+    okButton.addEventListener("click", () => {
+      notificationDiv.remove();
+      index++;
+      setTimeout(showNotification, 1000); // Delay before showing next notification
+    });
+
+    notificationDiv.appendChild(okButton);
+    document.body.appendChild(notificationDiv);
+
+    // Start animation: slide down & fade in
+    setTimeout(() => {
+      notificationDiv.style.top = "20px";
+      notificationDiv.style.opacity = "1";
+    }, 100);
+
+    // Hide after 7s if not clicked, then show the next one
+    setTimeout(() => {
+      if (document.body.contains(notificationDiv)) {
+        notificationDiv.style.top = "-50px"; // Slide up
+        notificationDiv.style.opacity = "0";
+        setTimeout(() => {
+          notificationDiv.remove();
+          index++;
+          setTimeout(showNotification, 500); // Delay before showing next notification
+        }, 500);
+      }
+    }, 20000);
+  }
+
+  if (notifications.length > 0) {
+    showNotification(); // Start showing notifications sequentially
+  }
+});
+
+
+
+  function toggleNextPage() {
+      const nextPage = document.getElementById("nextpage");
+      if (nextPage.classList.contains("show")) {
+        nextPage.classList.remove("show");
+        setTimeout(() => nextPage.style.display = "none", 300); // Wait for animation
+      } else {
+        nextPage.style.display = "block";
+        setTimeout(() => nextPage.classList.add("show"), 10);
+      }
+    }
+
+    function redirectTo(url) {
+      window.location.href = url;
+    }
+
+    
+    
+   
+</script>
+
+
+</html>
