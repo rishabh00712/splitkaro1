@@ -44,7 +44,7 @@
 
     .diamond2 {
       top: 45px;
-      right: 6px;
+      right: 10px;
       z-index: 1;
       animation-delay: 1.5s;
     }
@@ -58,6 +58,30 @@
       0%, 100% {   opacity: 1; }
       50% { opacity: 0.3; }
     }
+
+    @media (max-width: 600px) {
+  .logo {
+    width: 80px;
+    height: 80px;
+  }
+  
+  .diamond {
+
+    width: 150px;
+    height: 150px;
+    border-width: 15px;
+  }
+  
+  .diamond1 {
+    top: -130px;
+    right: -35px;
+  }
+  
+  .diamond2 {
+    top: -50px;
+    right: -35px;
+  }
+}
   </style>
 </head>
 

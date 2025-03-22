@@ -339,3 +339,20 @@ input[type="text"] {
   border-collapse: collapse;
   margin-top: 20px;
 }
+
+
+
+/* Mobile Responsiveness */
+@media (max-width: 768px) {
+  
+  #data-table{
+    width: 380px;
+  }
+  .back-button {
+    position: relative;
+    bottom: 20px;
+
+      font-size: 18px;
+      right: 15px;
+  }
+}
