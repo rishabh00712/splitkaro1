@@ -501,8 +501,16 @@ app.get('/delete-panding/:id', async (req, res) => {
   }
 });
 
-
-
+//............................................................................
+app.get('/duepayment', (req, res) => {
+  const groupDate = moment("2025-01-22").startOf('day'); // Ensure time is 00:00:00
+  const currentDate = moment();
+        const daysDifference = currentDate.diff(groupDate, 'days');// Now gives the correct result
+  console.log(daysDifference);
+  res.render('duepayment', {
+      daysDiff: daysDifference
+  });
+});
 // Endpoint to receive the voice transcript
 // POST endpoint to handle voice expense data
 

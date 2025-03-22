@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Form</title>
+    <link rel="stylesheet" href="/styles/det.css">
+</head>
+<style>
+    .form-container{
+        background-color: #ff8686;
+        opacity: 0.8;
+    }
+    .button-container {
+        background-color: #a67d7d;
+    }
+    .submit-button{
+        background-color: #956c6c;
+    }
+    .button-container:hover {
+        background-color: #7e6565;
+    }
+    .submit-button:hover{
+        background-color: #766565;
+    }
+</style>
+<body>
+   
+    <div class="form-container">
+        <button class="back-button" onclick="window.location.href='/home'">
+            &#x276E;
+          </button>
+        <div class="form-header">The Payment Is Panding Sence <%=daysDiff%> Days</div>
+       
+        <div class="label">Details</div>
+        <div class="field">Water bill payment</div>
+        <div class="label">Category</div>
+
+        <div class="field">Bill</div>
+        <div class="label">Amount</div>
+        <div class="field">200</div>
+        <div class="label">Date</div>
+        <div class="field"><a>2025-01-22</a></div>
+        <div class="label">Time</div>
+        <div class="field"><a href="#">9.10 AM</a></div>
+
+        <div class="group-members-section">
+            <div>Group Members</div>
+            <div class="members-container">
+                <div class="member">Ram</div>
+                <div class="member">Ravan</div>
+                <div class="member">Sita</div>
+            </div>
+        </div>
+
+        <div class="button-container">
+            <button class="submit-button" onclick="window.location.href='#'">Payment Now</button>
+            
+        </div>
+    </div>
+</body>
+</html>
