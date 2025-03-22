@@ -21,7 +21,7 @@
     <div class="container">
         <!-- Profile Section -->
         <div class="profile-section">
-            <div class="profile-pic"></div>
+            <div class="profile-pic" style="background-image: url(/ris.jpg);"></div>
 
             <form id="profile-form" action="/update-profile" method="POST">
                 <div class="editable-field">
@@ -34,6 +34,7 @@
                     <button type="submit">Submit</button>
                 </div>
             </form>
+            <button id="logout">Log Out</button>
 
         </div>
 
@@ -138,6 +139,16 @@
           
         });
 
+        const logoutButton = document.getElementById("logout");
+if (logoutButton) {
+  logoutButton.addEventListener("click", function () {
+    localStorage.removeItem("introShown"); // Remove intro flag on logout
+    localStorage.setItem("loggedOut", "true"); // Store logout state
+    window.location.href = "/"; // Redirect to home page
+  });
+}
+
+  
     </script>
 </body>
 

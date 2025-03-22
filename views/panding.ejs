@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Form</title>
+    <link rel="stylesheet" href="/styles/det.css">
+</head>
+<style>
+    .form-container{
+        background-color: #ffc5c5;
+        opacity: 0.8;
+    }
+    .button-container {
+        background-color: #f15151;
+    }
+    .submit-button{
+        background-color: #f15151;
+    }
+    .button-container:hover {
+        background-color: #e14b4b;
+    }
+    .submit-button:hover{
+        background-color: #d94747;
+    }
+</style>
+<body>
+   
+    <div class="form-container">
+        <button class="back-button" onclick="window.location.href='/home'">
+            &#x276E;
+          </button>
+        <div class="form-header">The Payment Is Panding Sence <%=daysDiff%> Days</div>
+       
+        <div class="label">Details</div>
+        <div class="field"><%=group.description%></div>
+        <div class="label">Category</div>
+
+        <div class="field"><%= group.category%></div>
+        <div class="label">Amount</div>
+        <div class="field"><%=group.payment%></div>
+        <div class="label">Date</div>
+        <div class="field"><a><%=group.date%></a></div>
+        <div class="label">Time</div>
+        <div class="field"><a href="#"><%=group.time%></a></div>
+
+        <div class="group-members-section">
+            <div>Group Members</div>
+            <div class="members-container">
+                <div class="member">Ram</div>
+                <div class="member">Ravan</div>
+                <div class="member">Sita</div>
+            </div>
+        </div>
+
+        <div class="button-container">
+            <button class="submit-button" onclick="window.location.href='/delete-panding/<%=encodeURIComponent( group.id)%>'">Payment Now</button>
+            
+        </div>
+    </div>
+</body>
+</html>

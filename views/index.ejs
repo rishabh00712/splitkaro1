@@ -8,184 +8,293 @@
   <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&family=Roboto:wght@300;500&display=swap"
     rel="stylesheet">
   <link rel="stylesheet" href="/styles/home.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/introjs.min.css">
 
 </head>
+<style>
+  .pandind:hover {
+    background-color: #050505;
+  }
+
+  .p {
+    background-color: rgb(12, 12, 11);
+  }
+</style>
 
 <body>
   <%- include('partials/loading.ejs') %>
-   <!-- Next Page Popup -->
-   <div id="nextpage">
-    <button onclick="window.location.href='/quickadd'">Quick Add</button>
-    <button onclick="window.location.href='/voiceadd'">Voice Add</button>    
-  </div>
-  <div class="container">
-  
-    <!-- Header Section -->
-    <div class="header">
-      <a href="./profile"><div class="profile">👤</div></a> 
-      <% if (notifications && notifications.length> 0) { %>
-        <div id="notification-container" data-notifications='<%= JSON.stringify(notifications) %>'></div>
-        <% } %>
-
-
+    <!-- Next Page Popup -->
+    <div id="nextpage">
+      <button onclick="window.location.href='/quickadd'">Quick Add</button>
+      <button onclick="window.location.href='/voiceadd'">Voice Add</button>
     </div>
+    <div class="container">
 
-    <!-- Image Section -->
-    <div class="image-section">
-      💸 Expense Tracker
-    </div>
+      <!-- Header Section -->
+      <div class="header profile">
+        <a href="./profile">
+          <div class="profile">👤</div>
+        </a>
+        <div class=".noti">
+          <% if (notifications && notifications.length> 0) { %>
+            <div id="notification-container" data-notifications='<%= JSON.stringify(notifications) %>'></div>
+            <% } %>
+        </div>
 
-    <!-- Groups Section -->
+
+
+      </div>
+
+      <!-- Image Section -->
+      <div class="image-section">
+        💸 Expense Tracker
+      </div>
+
+      <!-- Groups Section -->
       <a href="/new">
-        <div class="groups-section" >
+        <div class="groups-section">
           <div class="group add-group">+</div> <!-- "+" button at the end -->
-    </div>
+        </div>
       </a>
-      
-     
 
 
-        <!-- Bottom Section -->
 
-        <div id="history">
-          <!-- History Heading -->
-          <div id="heading-history">
-              <h1>History</h1>
-          </div>
-      
-          <!-- Table Headers -->
-          <div class="history-table header">
-              <div>Category</div>
-              <div>Description</div>
-              <div>Payment Amount</div>
-              <div>Date</div>
-              <div>Time</div>
-          </div>
-          <a href="#" >
-            <div class="history-table row" style="background-color: #ffcccc; transition: background 0.3s;">
 
-                <div>Bill</div>
-                <div>Water Bill payment</div>
-                <div>200</div>
-                <div>20/02/25</div>
-                <div>9.10 Am</div>
+      <!-- Bottom Section -->
+
+      <div id="history">
+        <!-- History Heading -->
+        <div id="heading-history">
+          <h1>History</h1>
+        </div>
+
+        <!-- Table Headers -->
+        <div class="history-table header">
+          <div>Category</div>
+          <div>Description</div>
+          <div>Payment Amount</div>
+          <div>Date</div>
+          <div>Time</div>
+        </div>
+        <div class="allrows">
+          <a href="#">
+            <div class="history-table row fix"
+              style="background-color: #ff7777; transition: background-color 0.3s ease; opacity: 0.7;"
+              onmouseover="this.style.backgroundColor='#e16464';" onmouseout="this.style.backgroundColor='#ff7777';">
+
+
+              <div>Bill</div>
+              <div>Water Bill payment</div>
+              <div>200</div>
+              <div>2025-01-22</div>
+              <div>9.10 AM</div>
             </div>
           </a>
 
-          <% if (pendings && pendings.length > 0) { %>
-            <% pendings.forEach(pending => { %>
-                <a href="#">
-                    <div class="history-table row">
-                        <div><%= pending.category %></div>
-                        <div><%= pending.description %></div>
-                        <div><%= pending.payment %></div>
-                        <div><%= pending.date %></div>
-                        <div><%= pending.time %></div>
-                    </div>
-                </a>
-            <% }) %>
-        <% } %>
+          <% if (pendings && pendings.length> 0) { %>
+            <% pendings.forEach(pending=> { %>
 
-          <!-- Table Data -->
-          <% if (groups && groups.length > 0) { %>
-              <% groups.forEach(group => { %>
-                  <a href="#">
-                      <div class="history-table row">
-                          <div><%= group.category %></div>
-                          <div><%= group.description %></div>
-                          <div><%= group.payment %></div>
-                          <div><%= group.date %></div>
-                          <div><%= group.time %></div>
-                      </div>
-                  </a>
+              <a href="/panding_details/<%= encodeURIComponent(pending.id) %>">
+                <div class="history-table row p"
+                  style="background-color: #ffb570; transition: background-color 0.3s ease; opacity: 0.7;"
+                  onmouseover="this.style.backgroundColor='#ec9c51';"
+                  onmouseout="this.style.backgroundColor='#ffb570';">
+                  <div>
+                    <%= pending.category %>
+                  </div>
+                  <div>
+                    <%= pending.description %>
+                  </div>
+                  <div>
+                    <%= pending.payment %>
+                  </div>
+                  <div>
+                    <%= pending.date %>
+                  </div>
+                  <div>
+                    <%= pending.time %>
+                  </div>
+                </div>
+              </a>
+
               <% }) %>
-          <% } %>
+                <% } %>
+
+                  <!-- Table Data -->
+                  <% if (groups && groups.length> 0) { %>
+                    <% groups.forEach(group=> { %>
+                      <a href="/details/<%= encodeURIComponent(group.id) %> %>">
+                        <div class="history-table row">
+                          <div>
+                            <%= group.category %>
+                          </div>
+                          <div>
+                            <%= group.description %>
+                          </div>
+                          <div>
+                            <%= group.payment %>
+                          </div>
+                          <div>
+                            <%= group.date %>
+                          </div>
+                          <div>
+                            <%= group.time %>
+                          </div>
+                        </div>
+                      </a>
+                      <% }) %>
+                        <% } %>
+        </div>
       </div>
 
 
-      </div>
+    </div>
 
-        <!-- Floating Add Button -->
-        <button class="floating-add-btn" onclick="toggleNextPage()">+</button>
+    <!-- Floating Add Button -->
+    <button class="floating-add-btn" onclick="toggleNextPage()">+</button>
 
-  </div>
+    </div>
+
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const container = document.getElementById("notification-container");
+        const notifications = JSON.parse(container.getAttribute("data-notifications"));
+        let index = 0; // Track notification index
+
+        function showNotification() {
+          if (index >= notifications.length) return; // Stop if all notifications are shown
+
+          // Create notification div
+          const notificationDiv = document.createElement("div");
+          notificationDiv.className = "notification";
+          notificationDiv.innerHTML = `🔔 ${notifications[index]}`;
+
+          // Create OK button
+          const okButton = document.createElement("button");
+          okButton.className = "ok-button";
+          okButton.innerText = "OK";
+
+          // Remove notification when clicking "OK" and show the next one
+          okButton.addEventListener("click", () => {
+            notificationDiv.remove();
+            index++;
+            setTimeout(showNotification, 1000); // Delay before showing next notification
+          });
+
+          notificationDiv.appendChild(okButton);
+          document.body.appendChild(notificationDiv);
+
+          // Start animation: slide down & fade in
+          setTimeout(() => {
+            notificationDiv.style.top = "20px";
+            notificationDiv.style.opacity = "1";
+          }, 100);
+
+          // Hide after 7s if not clicked, then show the next one
+          setTimeout(() => {
+            if (document.body.contains(notificationDiv)) {
+              notificationDiv.style.top = "-50px"; // Slide up
+              notificationDiv.style.opacity = "0";
+              setTimeout(() => {
+                notificationDiv.remove();
+                index++;
+                setTimeout(showNotification, 500); // Delay before showing next notification
+              }, 500);
+            }
+          }, 24000);
+        }
+
+        if (notifications.length > 0) {
+          showNotification(); // Start showing notifications sequentially
+        }
+      });
+
+
+
+      function toggleNextPage() {
+        const nextPage = document.getElementById("nextpage");
+        if (nextPage.classList.contains("show")) {
+          nextPage.classList.remove("show");
+          setTimeout(() => nextPage.style.display = "none", 300); // Wait for animation
+        } else {
+          nextPage.style.display = "block";
+          setTimeout(() => nextPage.classList.add("show"), 10);
+        }
+      }
+
+      function redirectTo(url) {
+        window.location.href = url;
+      }
+
+
+      //................................intro
+
+      document.addEventListener("DOMContentLoaded", function () {
+        if (localStorage.getItem("loggedOut")) {
+    localStorage.removeItem("loggedOut"); // Clear logout flag
+    localStorage.removeItem("introShown"); // Ensure intro resets
+  }
+        if (!localStorage.getItem("introShown")) {
+          introJs()
+            .setOptions({
+              steps: [
+                {
+                  title: "Wellcome to SplitKaro",
+                  intro: "Welcome! Let's take a quick tour of the key features.",
+                  position: "bottom",
+                },
+                {
+                  element: document.querySelector('.profile'),
+                  title: "Users Profile",
+                  intro: "The user's profile displays their monthly expenses in a chart. The profile stars also indicate the user's repayment tendency.",
+                  position: "right",
+                },
+                {
+                  element: document.querySelector('.noti'),
+                  title: "Notification Bar",
+                  intro: "An AI-powered notification that analyzes your monthly expenses and provides personalized financial advice.",
+                  position: "right",
+                },
+                {
+                  element: document.querySelector('.add-group'),
+                  title: "Add Groups",
+                  intro: "A common feature that allows you to add friends and easily split bills.",
+                  position: "right",
+                },
+                {
+                  element: document.querySelector('.history-table'),
+                  title: "History Table",
+                  intro: "A list of payment histories with color-coded statuses: red indicates overdue bills, orange represents bills you need to pay, and blue signifies bills your friends are responsible for.",
+                  position: "bottom",
+                },
+                {
+                  element: document.querySelector('.floating-add-btn'),
+                  title: "Quick Add",
+                  intro: "This button allows you to temporarily add bills using voice or text notes and reminds you later. It's especially useful when you're short on time.",
+                  position: "bottom",
+                },
+                {
+                  
+                  title: "ThankYou❤️",
+                  intro: "Please explore my website and make sure to log out before exiting 😊",
+                  position: "bottom",
+                },
+              ],
+              showProgress: true,
+              showBullets: false,
+              exitOnOverlayClick: false,
+              disableInteraction: true,
+            })
+            .oncomplete(function () {
+              localStorage.setItem("introShown", "true"); // Mark as shown when tour completes
+            })
+            .start();
+        }
+      });
+
+    </script>
 </body>
-
-<script>
-  document.addEventListener("DOMContentLoaded", function () {
-  const container = document.getElementById("notification-container");
-  const notifications = JSON.parse(container.getAttribute("data-notifications"));
-  let index = 0; // Track notification index
-
-  function showNotification() {
-    if (index >= notifications.length) return; // Stop if all notifications are shown
-
-    // Create notification div
-    const notificationDiv = document.createElement("div");
-    notificationDiv.className = "notification";
-    notificationDiv.innerHTML = `🔔 ${notifications[index]}`;
-
-    // Create OK button
-    const okButton = document.createElement("button");
-    okButton.className = "ok-button";
-    okButton.innerText = "OK";
-
-    // Remove notification when clicking "OK" and show the next one
-    okButton.addEventListener("click", () => {
-      notificationDiv.remove();
-      index++;
-      setTimeout(showNotification, 1000); // Delay before showing next notification
-    });
-
-    notificationDiv.appendChild(okButton);
-    document.body.appendChild(notificationDiv);
-
-    // Start animation: slide down & fade in
-    setTimeout(() => {
-      notificationDiv.style.top = "20px";
-      notificationDiv.style.opacity = "1";
-    }, 100);
-
-    // Hide after 7s if not clicked, then show the next one
-    setTimeout(() => {
-      if (document.body.contains(notificationDiv)) {
-        notificationDiv.style.top = "-50px"; // Slide up
-        notificationDiv.style.opacity = "0";
-        setTimeout(() => {
-          notificationDiv.remove();
-          index++;
-          setTimeout(showNotification, 500); // Delay before showing next notification
-        }, 500);
-      }
-    }, 20000);
-  }
-
-  if (notifications.length > 0) {
-    showNotification(); // Start showing notifications sequentially
-  }
-});
-
-
-
-  function toggleNextPage() {
-      const nextPage = document.getElementById("nextpage");
-      if (nextPage.classList.contains("show")) {
-        nextPage.classList.remove("show");
-        setTimeout(() => nextPage.style.display = "none", 300); // Wait for animation
-      } else {
-        nextPage.style.display = "block";
-        setTimeout(() => nextPage.classList.add("show"), 10);
-      }
-    }
-
-    function redirectTo(url) {
-      window.location.href = url;
-    }
-
-    
-    
-   
-</script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intro.js/7.2.0/intro.min.js"></script>
 
 </html>

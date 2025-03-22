@@ -21,7 +21,7 @@
   <div id="notification-container"></div>
 
   <button id="start-btn">Start Recording</button>
-  <p id="status">Click and speak naturally</p>
+
   <div id="error-msg"></div>
 
   <!-- Expense Table -->
@@ -334,6 +334,26 @@
           });
       });
     }
+
+    document.addEventListener('DOMContentLoaded', function() {
+        // Animate elements in sequence
+        const elements = [
+            '.button-containers',
+            'h1',
+            '#start-btn',
+            '#status',
+            '#error-msg',
+            '#data-table'
+        ];
+
+        elements.forEach((selector, index) => {
+            const el = document.querySelector(selector);
+            if (el) {
+                el.style.animationDelay = `${0.3 * index}s`;
+                el.classList.add('fade-in');
+            }
+        });
+    });
   </script>
 </body>
 

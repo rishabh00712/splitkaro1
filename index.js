@@ -6,6 +6,7 @@ import { render } from "ejs";
 import { group, time } from "console";
 // Import dotenv and call config() method
 import dotenv from 'dotenv';
+import moment from 'moment';
 dotenv.config();
 
 
@@ -176,7 +177,7 @@ app.get("/home",async (req, res) => {
     // Fetch data from `groups`
     const groupsResult = await client.query("SELECT * FROM groups");
     const groupsData = groupsResult.rows;
- 
+    
   res.render("index", { notifications: null,
     groups:groupsData,
     pendings:pendingData
@@ -304,8 +305,11 @@ app.post("/add-expense", async (req, res) => {
     return res.redirect(`/quickadd`);
   }
 
-  // Get the current date and time
-  const date = new Date().toLocaleDateString();
+  const date = new Intl.DateTimeFormat('en-CA', {
+    year: 'numeric',
+    month: '2-digit',
+    day: '2-digit'
+}).format(new Date());
   const formattedTime = new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit', hour12: true });
 const time = formattedTime.replace(/(am|pm)/, (match) => match.toUpperCase());
 
@@ -400,6 +404,104 @@ app.get("/add/:id", async (req, res) => {
 app.get("/voiceadd", (req, res) => {
   res.render("voiceadd");
 });
+//.................................................................................
+
+app.get('/details/:id',async (req, res) => {
+  const id = req.params.id;
+
+    try{
+      const groupsResult = await client.query(`SELECT * FROM groups where id= $1`,[id]);
+      const groupsData = groupsResult.rows[0];
+      const groupDate = moment(groupsData.date, "YYYY-MM-DD");
+        const currentDate = moment();
+        const daysDifference = currentDate.diff(groupDate, 'days');
+      // Process the values (e.g., render a page or return JSON)
+      res.render('details', { 
+        group:groupsData,daysDiff:daysDifference
+    });
+    } catch(err){
+      console.log("error something went wrong",err);
+      res.redirect("/home");
+    }
+
+});
+
+app.get('/delete-grp/:id',async(req,res)=>{
+ 
+  const id=req.params.id;
+  console.log(id);
+  try{
+    await client.query(
+      `DELETE FROM groups WHERE id = $1`,
+      [id]
+    );
+    res.redirect("/home");
+  }catch(err){
+    console.log("something went wrong",err);
+    res.redirect("/home");
+  }
+
+})
+
+//...............................................
+app.get('/panding_details/:id',async (req, res) => {
+  const id = req.params.id;
+  console.log(id)
+    try{
+      const groupsResult = await client.query(`SELECT * FROM payment_panding where id= $1`,[id]);
+      const groupsData = groupsResult.rows[0];
+      const groupDate = moment(groupsData.date, "YYYY-MM-DD");
+        const currentDate = moment();
+        const daysDifference = currentDate.diff(groupDate, 'days');
+        console.log(groupDate)
+      // Process the values (e.g., render a page or return JSON)
+      res.render('panding', { 
+        group:groupsData,daysDiff:daysDifference
+    });
+    } catch(err){
+      console.log("error something went wrong",err);
+      res.redirect("/home");
+    }
+
+});
+
+app.get('/delete-panding/:id', async (req, res) => {
+  const id = req.params.id;
+
+  try {
+    // Step 1: Delete the pending payment
+    await client.query(`DELETE FROM payment_panding WHERE id = $1`, [id]);
+
+    // Step 2: Fetch payment_intime and late_payment from user_info
+    const userResult = await client.query(`SELECT payment_intime, late_payment FROM user_info WHERE id = 1`);
+    let { payment_intime, late_payment } = userResult.rows[0];
+
+    // Step 3: Increment payment_intime
+    payment_intime += 1;
+
+    // Step 4: Calculate new stars rating (1-5) based on ratio
+    const totalPayments = payment_intime + late_payment;
+    let stars = totalPayments > 0 ? Math.round((payment_intime / totalPayments) * 5) : 0;
+
+    // Ensure stars stay between 1 and 5
+    stars = Math.min(Math.max(stars, 1), 5);
+
+    // Step 5: Update user_info table
+    await client.query(
+      `UPDATE user_info SET payment_intime = $1, stars = $2 WHERE id = 1`,
+      [payment_intime, stars]
+    );
+
+    // Step 6: Redirect to home with updated values
+    res.redirect("/home");
+
+  } catch (err) {
+    console.log("Something went wrong", err);
+    res.redirect("/home");
+  }
+});
+
+
 
 // Endpoint to receive the voice transcript
 // POST endpoint to handle voice expense data

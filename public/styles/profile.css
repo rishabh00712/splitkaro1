@@ -259,4 +259,16 @@
     }
   }
 
+  #logout{
+    background-color: rgb(255, 99, 99);
+    width: 80%;
+    margin-top: 17px;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+   
+  }
+  #logout:hover{
+    background-color: rgb(228, 92, 92);
+    transform: scale(1.05);
+  }
+
   
