@@ -229,69 +229,70 @@
 
 
       //................................intro
-
       document.addEventListener("DOMContentLoaded", function () {
-        if (localStorage.getItem("loggedOut")) {
-    localStorage.removeItem("loggedOut"); // Clear logout flag
-    localStorage.removeItem("introShown"); // Ensure intro resets
-  }
-        if (!localStorage.getItem("introShown")) {
-          introJs()
-            .setOptions({
-              steps: [
-                {
-                  title: "Wellcome to SplitKaro",
-                  intro: "Welcome! Let's take a quick tour of the key features.",
-                  position: "bottom",
-                },
-                {
-                  element: document.querySelector('.profile'),
-                  title: "Users Profile",
-                  intro: "The user's profile displays their monthly expenses in a chart. The profile stars also indicate the user's repayment tendency.",
-                  position: "right",
-                },
-                {
-                  element: document.querySelector('.noti'),
-                  title: "Notification Bar",
-                  intro: "An AI-powered notification that analyzes your monthly expenses and provides personalized financial advice.",
-                  position: "right",
-                },
-                {
-                  element: document.querySelector('.add-group'),
-                  title: "Add Groups",
-                  intro: "A common feature that allows you to add friends and easily split bills.",
-                  position: "right",
-                },
-                {
-                  element: document.querySelector('.history-table'),
-                  title: "History Table",
-                  intro: "A list of payment histories with color-coded statuses: red indicates overdue bills, orange represents bills you need to pay, and blue signifies bills your friends are responsible for.",
-                  position: "bottom",
-                },
-                {
-                  element: document.querySelector('.floating-add-btn'),
-                  title: "Quick Add",
-                  intro: "This button allows you to temporarily add bills using voice or text notes and reminds you later. It's especially useful when you're short on time.",
-                  position: "bottom",
-                },
-                {
-                  
-                  title: "ThankYou❤️",
-                  intro: "Please explore my website and make sure to log out before exiting 😊",
-                  position: "bottom",
-                },
-              ],
-              showProgress: true,
-              showBullets: false,
-              exitOnOverlayClick: false,
-              disableInteraction: true,
-            })
-            .oncomplete(function () {
-              localStorage.setItem("introShown", "true"); // Mark as shown when tour completes
-            })
-            .start();
-        }
-      });
+    if (localStorage.getItem("loggedOut")) {
+        localStorage.removeItem("loggedOut"); // Clear logout flag
+        localStorage.removeItem("introShown"); // Ensure intro resets
+    }
+
+    if (!localStorage.getItem("introShown")) {
+        setTimeout(function () { // Add 3s delay
+            introJs()
+                .setOptions({
+                    steps: [
+                        {
+                            title: "Welcome to SplitKaro",
+                            intro: "Welcome! Let's take a quick tour of the key features.",
+                            position: "bottom",
+                        },
+                        {
+                            element: document.querySelector('.profile'),
+                            title: "User Profile",
+                            intro: "The user's profile displays their monthly expenses in a chart. The profile stars also indicate the user's repayment tendency.",
+                            position: "right",
+                        },
+                        {
+                            element: document.querySelector('.noti'),
+                            title: "Notification Bar",
+                            intro: "An AI-powered notification that analyzes your monthly expenses and provides personalized financial advice.",
+                            position: "right",
+                        },
+                        {
+                            element: document.querySelector('.add-group'),
+                            title: "Add Groups",
+                            intro: "A common feature that allows you to add friends and easily split bills.",
+                            position: "right",
+                        },
+                        {
+                            element: document.querySelector('.history-table'),
+                            title: "History Table",
+                            intro: "A list of payment histories with color-coded statuses: red indicates overdue bills, orange represents bills you need to pay, and blue signifies bills your friends are responsible for.",
+                            position: "bottom",
+                        },
+                        {
+                            element: document.querySelector('.floating-add-btn'),
+                            title: "Quick Add",
+                            intro: "This button allows you to temporarily add bills using voice or text notes and reminds you later. It's especially useful when you're short on time.",
+                            position: "bottom",
+                        },
+                        {
+                            title: "Thank You ❤️",
+                            intro: "Please explore my website and make sure to log out before exiting 😊",
+                            position: "bottom",
+                        },
+                    ],
+                    showProgress: true,
+                    showBullets: false,
+                    exitOnOverlayClick: false,
+                    disableInteraction: true,
+                })
+                .oncomplete(function () {
+                    localStorage.setItem("introShown", "true"); // Mark as shown when tour completes
+                })
+                .start();
+        }, 3200); // 3s delay before starting
+    }
+});
 
     </script>
 </body>

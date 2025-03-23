@@ -426,22 +426,42 @@ app.get('/details/:id',async (req, res) => {
 
 });
 
-app.get('/delete-grp/:id',async(req,res)=>{
- 
-  const id=req.params.id;
-  console.log(id);
-  try{
+app.get('/delete-grp/:id/:amount/:category', async (req, res) => {
+  const id = req.params.id;
+  const amount = parseFloat(req.params.amount); // Ensure amount is a number
+  const category = req.params.category;
+
+  console.log(`Deleting group: ${id}, Deducting ${amount} from category: ${category}`);
+
+  try {
+    // Start transaction
+    await client.query('BEGIN');
+
+    // Subtract amount from the category
+    await client.query(
+      `UPDATE catagory_payment 
+       SET total_spend = GREATEST(total_spend - $1, 0) 
+       WHERE category = $2`,
+      [amount, category]
+    );
+
+    // Delete the group
     await client.query(
       `DELETE FROM groups WHERE id = $1`,
       [id]
     );
+
+    // Commit transaction
+    await client.query('COMMIT');
+
     res.redirect("/home");
-  }catch(err){
-    console.log("something went wrong",err);
+  } catch (err) {
+    await client.query('ROLLBACK'); // Rollback if anything fails
+    console.log("Something went wrong", err);
     res.redirect("/home");
   }
+});
 
-})
 
 //...............................................
 app.get('/panding_details/:id',async (req, res) => {
@@ -465,10 +485,19 @@ app.get('/panding_details/:id',async (req, res) => {
 
 });
 
-app.get('/delete-panding/:id', async (req, res) => {
+app.get('/delete-panding/:id/:amount/:category', async (req, res) => {
   const id = req.params.id;
-
+  const amount = parseFloat(req.params.amount); // Ensure amount is a number
+  const category = req.params.category;
+  console.log(amount,category);
   try {
+    await client.query(
+      `UPDATE catagory_payment 
+       SET total_spend = (total_spend + $1) 
+       WHERE category = $2`,
+      [amount, category]
+    );
+
     // Step 1: Delete the pending payment
     await client.query(`DELETE FROM payment_panding WHERE id = $1`, [id]);
 
